@@ -3,7 +3,7 @@
 
 # Build
 
-Run the command bellow will add [excutable binaries](./src/bin) to your PATH
+Run the command bellow will add [executable binaries](./src/bin) to your PATH
 
 ```bash
 cargo install --path .
