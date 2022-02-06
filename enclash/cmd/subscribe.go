@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const CONF_TUN = `
+const CONF_TUN_WINDOWS = `
 tun:
   enable: true
   stack: gvisor
@@ -20,9 +20,6 @@ tun:
   auto-detect-interface: true 
 dns:
   enable: true
-  default-nameserver:
-    - 114.114.114.114
-    - 8.8.8.8
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16 
   nameserver:
@@ -56,7 +53,7 @@ var subscribeCmd = &cobra.Command{
 		// Add TUN support
 		if tunEnabled {
 			var clashTUNConf ClashConfig
-			if err := yaml.Unmarshal([]byte(CONF_TUN), &clashTUNConf); err != nil {
+			if err := yaml.Unmarshal([]byte(CONF_TUN_WINDOWS), &clashTUNConf); err != nil {
 				panic(err)
 			}
 			for k, v := range clashTUNConf {
@@ -76,7 +73,7 @@ var subscribeCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(subscribeCmd)
-	subscribeCmd.Flags().BoolP("tun", "t", false, "turn on TUN mode")
+	subscribeCmd.Flags().BoolP("tun", "t", false, "turn on TUN mode(Windows only, other os WIP)")
 }
 
 func grabSubscriptionConfig() ([]byte, error) {
