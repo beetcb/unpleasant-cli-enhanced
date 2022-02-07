@@ -84,6 +84,7 @@ func grabSubscriptionConfig() ([]byte, error) {
 		if err != nil {
 			panic(err)
 		}
+		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			panic(err)
