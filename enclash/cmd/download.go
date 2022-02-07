@@ -110,7 +110,7 @@ func zipBinary(r *bytes.Reader, b string) (*[]byte, error) {
 	}
 
 	for _, f := range zipR.File {
-		if filepath.Base(f.Name) == b {
+		if filepath.Base(f.Name) == b || len(zipR.File) == 1 {
 			open, err := f.Open()
 			if err != nil {
 				return nil, err
@@ -122,7 +122,7 @@ func zipBinary(r *bytes.Reader, b string) (*[]byte, error) {
 			return &ret, err
 		}
 	}
-	return nil, fmt.Errorf("Binary file not found")
+	return nil, fmt.Errorf("Binary file %v not found", b)
 }
 
 func gzBinary(r *bytes.Reader, b string) (*[]byte, error) {
