@@ -30,7 +30,7 @@ func (m model) Init() tea.Cmd {
 	return nil
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	// Is it a key press?
@@ -69,7 +69,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	// The header
-	s := "enclash can't figure out which release to download, please select it manully\n\n"
+	s := "enclash can't figure out which release to download\nplease select it manully\n\n"
 
 	// Iterate over our choices
 	for i, choice := range m.choices {
@@ -98,7 +98,7 @@ func (m model) View() string {
 
 func Select(choices *[]string) int {
 	state := initialModel(choices)
-	p := tea.NewProgram(state)
+	p := tea.NewProgram(&state)
 	if err := p.Start(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)
 		os.Exit(1)

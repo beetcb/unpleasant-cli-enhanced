@@ -32,7 +32,6 @@ var downloadCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
-
 		if binaryNameFlag != "" {
 			binaryName = binaryNameFlag
 		}
@@ -58,8 +57,6 @@ func dlAndDecompression(url string, binaryName string) {
 	if err != nil {
 		panic(err)
 	}
-	req.Header.Add("Accept", "application/octet-stream")
-
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		panic(err)
@@ -78,7 +75,6 @@ func dlAndDecompression(url string, binaryName string) {
 		if err != nil {
 			panic(err)
 		}
-		break
 	case ".gz":
 		if strings.Contains(url, ".tar.gz") {
 			decompressedBinary, err = targzBinary(bytesReader, b)
@@ -91,10 +87,16 @@ func dlAndDecompression(url string, binaryName string) {
 				panic(err)
 			}
 		}
-		break
+	case ".deb":
+	case ".rpm":
+	case ".apk":
+		fileName := b + fileExt
+		fmt.Printf("Detected deb/rpm/apk package, download directly to ./%s\nYou can install it with the appropriate commands\n", fileName)
+		if err := os.WriteFile(fileName, body, 0777); err != nil {
+			panic(err)
+		}
 	case "":
 		decompressedBinary = &body
-		break
 	default:
 		panic("unsupported file format")
 	}
@@ -143,12 +145,10 @@ func targzBinary(r *bytes.Reader, b string) (*[]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	defer gzR.Close()
 	tarR := tar.NewReader(gzR)
 
 	var file []byte
-
 	for {
 		header, err := tarR.Next()
 		if err == io.EOF {
@@ -157,13 +157,11 @@ func targzBinary(r *bytes.Reader, b string) (*[]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-
 		if (header.Typeflag != tar.TypeDir) && filepath.Base(header.Name) == b {
 			file, err = ioutil.ReadAll(tarR)
 			if err != nil {
 				return nil, err
 			}
-			break
 		}
 	}
 	return &file, nil
