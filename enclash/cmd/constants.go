@@ -6,7 +6,7 @@ tun:
   enable: true
   stack: gvisor
   dns-hijack:
-    - 198.18.0.2:53 
+    - any:53 
   auto-route: true   
   auto-detect-interface: true 
 dns:
