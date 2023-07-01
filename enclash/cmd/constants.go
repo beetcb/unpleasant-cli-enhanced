@@ -2,12 +2,11 @@ package cmd
 
 const WEB_STATIC_FOLDER = "clash-dashboard"
 const CONF_TUN_DNS = `
-# https://github.com/Dreamacro/clash/issues/2614
-# https://github.com/Dreamacro/clash/issues/2615
 # https://dreamacro.github.io/clash/premium/tun-device.html
 tun:
   enable: true
   stack: gvisor
+  # https://dreamacro.github.io/clash/introduction/faq.html#dns-hijack-does-not-work
   dns-hijack:
     - any:53 
   auto-route: true   
